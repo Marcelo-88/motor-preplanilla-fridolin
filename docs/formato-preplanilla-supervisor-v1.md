@@ -4,7 +4,15 @@ Estado: validado con las preplanillas de Medrano y Cabrera; tratamiento nocturno
 
 ## Alcance
 
-Esta versión define el formato base de los documentos que revisan los supervisores. Todavía no incluye bolsa de horas extra ni planilla final de Recursos Humanos.\n\n## Personal jornalero\n\n- La pestaña de jornaleros presenta solamente excepciones que requieren decisión; no muestra días trabajados normalmente.\n- Una jornada completa normal equivale a `1_TURNO` y no se incluye en el documento de revisión.\n- Un día sin marcaciones o con una marcación incompleta queda `PENDIENTE` y parte de `0_TURNOS` hasta que el supervisor confirme que fue trabajado.\n- Los retrasos se conservan como información de conducta, pero no reducen el jornal: el pago se determina por día trabajado.\n- Una jornada que supera 9 horas netas se propone como `TURNO_Y_MEDIO_POR_VALIDAR`.\n- El turno y medio nunca se concede automáticamente. Mientras está pendiente conserva `1_TURNO`; únicamente `APROBAR_TURNO_Y_MEDIO` cambia el pago a `1.5_TURNOS`.\n- En nocturno, la fecha operativa corresponde a la noche de entrada y la salida se busca en la mañana siguiente dentro de la ventana de esa jornada.\n- Para nocturnos se excluye el sábado como día de inicio regular; para diurnos se excluye el domingo.\n- Las tarifas generales y las excepciones de tarifa por persona se mantienen en `06_Tarifas_Jornaleros` del documento matriz.
+Esta versión define el formato base de los documentos que revisan los supervisores. Todavía no incluye bolsa de horas extra ni planilla final de Recursos Humanos.\n\n## Personal retirado
+
+- El estado laboral se toma de la pestaña `01_Maestro_Empleados`.
+- El personal retirado nunca aparece en `01_FIJOS_EVENTUALES` ni en `02_JORNALEROS`.
+- Si tuvo marcaciones dentro del periodo, sus excepciones se presentan en `03_PERSONAL_RETIRADO` para validación.
+- Si no tuvo ninguna actividad biométrica durante el mes, no se le generan faltas ficticias.
+- Cuando exista fecha de retiro, el motor debe evaluar únicamente desde el inicio del periodo hasta su último día laboral.
+
+## Personal jornalero\n\n- La pestaña de jornaleros presenta solamente excepciones que requieren decisión; no muestra días trabajados normalmente.\n- Una jornada completa normal equivale a `1_TURNO` y no se incluye en el documento de revisión.\n- Un día sin marcaciones o con una marcación incompleta queda `PENDIENTE` y parte de `0_TURNOS` hasta que el supervisor confirme que fue trabajado.\n- Los retrasos se conservan como información de conducta, pero no reducen el jornal: el pago se determina por día trabajado.\n- Una jornada que supera 9 horas netas se propone como `TURNO_Y_MEDIO_POR_VALIDAR`.\n- El turno y medio nunca se concede automáticamente. Mientras está pendiente conserva `1_TURNO`; únicamente `APROBAR_TURNO_Y_MEDIO` cambia el pago a `1.5_TURNOS`.\n- En nocturno, la fecha operativa corresponde a la noche de entrada y la salida se busca en la mañana siguiente dentro de la ventana de esa jornada.\n- Para nocturnos se excluye el sábado como día de inicio regular; para diurnos se excluye el domingo.\n- Las tarifas generales y las excepciones de tarifa por persona se mantienen en `06_Tarifas_Jornaleros` del documento matriz.
 
 ## Identificación del empleado
 
@@ -89,7 +97,7 @@ Esta versión define el formato base de los documentos que revisan los superviso
 - `00_INSTRUCCIONES`
 - `01_FIJOS_EVENTUALES`
 - `02_JORNALEROS`
-- `03_AUDITORIA`
+- `03_PERSONAL_RETIRADO`, cuando existan retirados asignados al supervisor\n- `04_AUDITORIA` cuando exista la pestaña de retirados; en caso contrario `03_AUDITORIA`
 
 Las secciones principal y técnica deben conservar filtros. Se congelan la fila de encabezados y las primeras cuatro columnas para facilitar la revisión.
 
