@@ -5,6 +5,7 @@ from datetime import date
 from typing import Iterable
 
 TOLERANCIA_ATRASO_MIN = 10
+UMBRAL_REVISION_RETRASO_MIN = 60
 UMBRAL_INFORMATIVO_MIN = 30
 PAUSA_COMIDA_MIN = 30
 PAUSA_COMIDA_MINIMA = 20
@@ -57,8 +58,12 @@ def incidencia_horaria(tipo: str, minutos: int) -> ResultadoIncidencia:
     if tipo == "ENTRADA_TARDE":
         if minutos <= TOLERANCIA_ATRASO_MIN:
             return ResultadoIncidencia(tipo, "INFORMATIVO", "NORMAL", False)
-        return ResultadoIncidencia(tipo, "PENDIENTE", f"ATRASO_{minutos}_MIN")
+        return ResultadoIncidencia(tipo, "AUTOMATICO", f"ATRASO_{minutos}_MIN", False) if minutos <= UMBRAL_REVISION_RETRASO_MIN else ResultadoIncidencia(tipo, "PENDIENTE", f"ATRASO_{minutos}_MIN")
     if tipo == "SALIDA_TEMPRANA":
+        if minutos <= TOLERANCIA_ATRASO_MIN:
+            return ResultadoIncidencia(tipo, "INFORMATIVO", "NORMAL", False)
+        if minutos <= 30:
+            return ResultadoIncidencia(tipo, "AUTOMATICO", f"SALIDA_TEMPRANA_{minutos}_MIN", False)
         return ResultadoIncidencia(tipo, "PENDIENTE", "SALIDA_TEMPRANA")
     raise ValueError(f"Tipo de incidencia no soportado: {tipo}")
 
