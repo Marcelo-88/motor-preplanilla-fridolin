@@ -1,10 +1,10 @@
 # Formato de preplanilla por supervisor — versión 1
 
-Estado: validado con la preplanilla de Medrano Fiorilo Ever Marcelo, agosto de 2026.
+Estado: validado con las preplanillas de Medrano y Cabrera; tratamiento nocturno en validación con Flores, agosto de 2026.
 
 ## Alcance
 
-Esta versión define el formato base de los documentos que revisan los supervisores. Todavía no incluye bolsa de horas extra, consolidación de jornaleros ni planilla final de Recursos Humanos.
+Esta versión define el formato base de los documentos que revisan los supervisores. Todavía no incluye bolsa de horas extra ni planilla final de Recursos Humanos.\n\n## Personal jornalero\n\n- La pestaña de jornaleros presenta solamente excepciones que requieren decisión; no muestra días trabajados normalmente.\n- Una jornada completa normal equivale a `1_TURNO` y no se incluye en el documento de revisión.\n- Un día sin marcaciones o con una marcación incompleta queda `PENDIENTE` y parte de `0_TURNOS` hasta que el supervisor confirme que fue trabajado.\n- Los retrasos se conservan como información de conducta, pero no reducen el jornal: el pago se determina por día trabajado.\n- Una jornada que supera 9 horas netas se propone como `TURNO_Y_MEDIO_POR_VALIDAR`.\n- El turno y medio nunca se concede automáticamente. Mientras está pendiente conserva `1_TURNO`; únicamente `APROBAR_TURNO_Y_MEDIO` cambia el pago a `1.5_TURNOS`.\n- En nocturno, la fecha operativa corresponde a la noche de entrada y la salida se busca en la mañana siguiente dentro de la ventana de esa jornada.\n- Para nocturnos se excluye el sábado como día de inicio regular; para diurnos se excluye el domingo.\n- Las tarifas generales y las excepciones de tarifa por persona se mantienen en `06_Tarifas_Jornaleros` del documento matriz.
 
 ## Identificación del empleado
 
