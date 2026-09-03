@@ -58,18 +58,42 @@ def generar_documentos_supervisor(
         supervisor = str(supervisor or "SIN SUPERVISOR ASIGNADO").strip()
         wb = Workbook()
         wb.remove(wb.active)
-        instrucciones = wb.create_sheet("00_INSTRUCCIONES")
-        instrucciones.append(["REVISIÓN DE EXCEPCIONES — PREPLANILLA FRIDOLIN"])
-        instrucciones.append(["Supervisor", supervisor])
-        instrucciones.append(["Regla", "INFORMATIVO sin acción = NORMAL"])
-        instrucciones.append(["Regla", "PENDIENTE sin acción = aplicar consecuencia"])
-        instrucciones.append(["Regla", "Retraso total <= 60 min = descuento automático"])
-        instrucciones.append(["Regla", "Sin marcación de comida = sin incidencia; descuento estándar de 30 min"])
-        fijos = grupo[~grupo["Tipo_Personal"].astype(str).str.contains("Jornal", case=False, na=False)]
-        jorn = grupo[grupo["Tipo_Personal"].astype(str).str.contains("Jornal", case=False, na=False)]
+        estado_col = next(
+            (col for col in ("Estado_Laboral", "Estado_Empleado", "Estado empleado", "Estado_Maestro")
+             if col in grupo.columns),
+            None,
+        )
+        retirado_mask = (
+            grupo[estado_col].fillna("").astype(str).str.contains("RETIR", case=False, na=False)
+            if estado_col else pd.Series(False, index=grupo.index)
+        )
+        retirados_asignados = grupo[retirado_mask].copy()
+        if not retirados_asignados.empty:
+            if "Tuvo_Actividad_Mes" in retirados_asignados.columns:
+                actividad = retirados_asignados["Tuvo_Actividad_Mes"].fillna(False).astype(bool)
+            else:
+                actividad_ci = retirados_asignados.groupby("CI")["Marcaciones RAW"].transform(
+                    lambda values: values.fillna("").astype(str).str.strip().ne("").any()
+                )
+                actividad = actividad_ci.astype(bool)
+            retirados = retirados_asignados[actividad].copy()
+        else:
+            retirados = retirados_asignados
+
+        activos = grupo[~retirado_mask].copy()
+        fijos = activos[~activos["Tipo_Personal"].astype(str).str.contains("Jornal", case=False, na=False)]
+        jorn = activos[activos["Tipo_Personal"].astype(str).str.contains("Jornal", case=False, na=False)]
         _crear_pestana(wb.create_sheet("01_FIJOS_EVENTUALES"), fijos.to_dict("records"), "FijosEventuales")
         _crear_pestana(wb.create_sheet("02_JORNALEROS"), jorn.to_dict("records"), "Jornaleros")
-        wb.create_sheet("03_AUDITORIA")
+        if not retirados_asignados.empty:
+            _crear_pestana(
+                wb.create_sheet("03_PERSONAL_RETIRADO"),
+                retirados.to_dict("records"),
+                "PersonalRetirado",
+            )
+            wb.create_sheet("04_AUDITORIA")
+        else:
+            wb.create_sheet("03_AUDITORIA")
         nombre = "".join(ch if ch.isalnum() else "_" for ch in supervisor).strip("_")
         destino = salida / f"Revision_PrePlanilla_{nombre}.xlsx"
         wb.save(destino)
