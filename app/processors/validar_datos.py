@@ -47,6 +47,12 @@ def validar_maestro(maestro: pd.DataFrame) -> ResultadoValidacion:
         df["Nombre_Completo"] = ""
     if "Supervisor" not in df.columns:
         df["Supervisor"] = ""
+    if "Estado" not in df.columns:
+        df["Estado"] = "Activo"
+    estado = df["Estado"].fillna("Activo").astype(str).str.strip().str.upper()
+    df["ESTADO_LABORAL"] = estado.map(
+        lambda value: "RETIRADO" if "RETIR" in value else "ACTIVO"
+    )
 
     sin_ci = df["CI_NORMALIZADO"].eq("")
     sin_tipo = df["Tipo_Personal"].fillna("").astype(str).str.strip().eq("")
@@ -77,6 +83,8 @@ def validar_maestro(maestro: pd.DataFrame) -> ResultadoValidacion:
             "maestro_valido": len(valido),
             "maestro_excluido": len(excluido),
             "sin_supervisor": len(advertencias),
+            "personal_activo": int(valido["ESTADO_LABORAL"].eq("ACTIVO").sum()),
+            "personal_retirado": int(valido["ESTADO_LABORAL"].eq("RETIRADO").sum()),
         },
     )
 
