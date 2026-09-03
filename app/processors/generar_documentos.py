@@ -11,7 +11,9 @@ DECISIONES = "PENDIENTE,APROBADO,APROBADO_HE,JUSTIFICAR_FALTA,VALIDAR_TRABAJADO,
 ESTADOS = "PENDIENTE,REVISADO,CONCLUIDO"
 COLUMNAS = [
     "Estado", "Empleado", "CI", "Fecha operativa", "Día", "Turno", "Área",
-    "Marcaciones", "Pares", "Horas trabajadas", "Excepción consolidada",
+    "Marcaciones RAW", "Jornada reconstruida", "Horas trabajadas",
+    "Retraso entrada", "Retraso comida", "Salida temprana automática",
+    "Total retraso", "Excepción consolidada",
     "Impacto", "Consecuencia sin acción", "Decisión supervisor",
     "Observación supervisor",
 ]
@@ -61,6 +63,8 @@ def generar_documentos_supervisor(
         instrucciones.append(["Supervisor", supervisor])
         instrucciones.append(["Regla", "INFORMATIVO sin acción = NORMAL"])
         instrucciones.append(["Regla", "PENDIENTE sin acción = aplicar consecuencia"])
+        instrucciones.append(["Regla", "Retraso total <= 60 min = descuento automático"])
+        instrucciones.append(["Regla", "Sin marcación de comida = sin incidencia; descuento estándar de 30 min"])
         fijos = grupo[~grupo["Tipo_Personal"].astype(str).str.contains("Jornal", case=False, na=False)]
         jorn = grupo[grupo["Tipo_Personal"].astype(str).str.contains("Jornal", case=False, na=False)]
         _crear_pestana(wb.create_sheet("01_FIJOS_EVENTUALES"), fijos.to_dict("records"), "FijosEventuales")
