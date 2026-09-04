@@ -4,7 +4,36 @@ Estado: validado con las preplanillas de Medrano y Cabrera; tratamiento nocturno
 
 ## Alcance
 
-Esta versión define el formato base de los documentos que revisan los supervisores. Todavía no incluye bolsa de horas extra ni planilla final de Recursos Humanos.\n\n## Personal retirado
+Esta versión define el formato base de los documentos que revisan los supervisores. Todavía no incluye bolsa de horas extra ni planilla final de Recursos Humanos.\n\n## Cambios de turno dentro del mes
+
+El maestro conserva la asignación final del empleado y tres campos para reconstruir su historial mensual:
+
+- `Turno Completo`: `S` cuando mantuvo un único turno durante todo el periodo; `N` cuando cambió de turno.
+- `Fecha DIurno`: rango o rangos en los que corresponde aplicar el horario diurno.
+- `Fecha Nocturno`: rango o rangos en los que corresponde aplicar el horario nocturno.
+
+Reglas del motor:
+
+- Con `Turno Completo = S`, se utiliza normalmente el turno, área y supervisor registrados al cierre del mes.
+- Con `Turno Completo = N`, cada jornada se reconstruye usando el turno correspondiente a su fecha.
+- Las fechas nocturnas usan 22:00–05:30 del día siguiente; las diurnas usan 07:00–15:30.
+- Una fecha que no pertenece a ninguno de los rangos no recibe un turno supuesto y no genera una falta automática.
+- El empleado se excluye de las pestañas generales para evitar duplicación.
+- Sus excepciones reales se presentan en `CAMBIOS_DE_TURNO` dentro de la preplanilla del supervisor final registrado en el maestro.
+
+### Caso de validación: Silvia Chambi
+
+- CI: `6754961`.
+- Nombre: Chambi Vasquez Silvia Antonia.
+- Asignación final: turno diurno, Panadería y Repostería, supervisora Navarro Isabel.
+- `Turno Completo = N`.
+- Nocturno: 01/08/2026–08/08/2026.
+- Diurno: 10/08/2026–31/08/2026.
+- El 09/08/2026 queda fuera de ambos rangos y no debe producir ausencia automática.
+- Ya fue eliminada completamente de la preplanilla de Flores, incluida la auditoría.
+- Pendiente: recalcular sus jornadas con ambos horarios y generar únicamente sus excepciones en `CAMBIOS_DE_TURNO` de la preplanilla de Navarro.
+
+## Personal retirado
 
 - El estado laboral se toma de la pestaña `01_Maestro_Empleados`.
 - El personal retirado nunca aparece en `01_FIJOS_EVENTUALES` ni en `02_JORNALEROS`.
