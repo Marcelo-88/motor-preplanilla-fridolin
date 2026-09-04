@@ -45,7 +45,7 @@ La fuente consolidada es `docs/formato-preplanilla-supervisor-v1.md`. La habilid
 
 ## Controles de integridad actuales
 
-- Medrano: 40.979 bytes; SHA-256 `2EEA164B243B3C4B6221798BD8A8D6BB4CD400FF4AF5A212554DF3EE80EEE517`.
+- Medrano: 40.983 bytes; SHA-256 `076A819F563B9D05B26E34A0AD3400801ACE4DD24E91A885FBB4FE44557B5CA0`.
 - Cabrera: 153.987 bytes; SHA-256 `7BB21DFDF64427A06A9BD0C1984BA51114D40CD21EB8E3F0CCD5F048AA726E70`.
 - Flores: 106.179 bytes; SHA-256 `EC9923CD3FF45A1C21988CC91989C59CC03B29B4CC74741B73ADBC05B8C89754`.
 
@@ -67,5 +67,4 @@ La fuente consolidada es `docs/formato-preplanilla-supervisor-v1.md`. La habilid
 - Generar la planilla final para Recursos Humanos.
 
 Estas funciones corresponden a una habilidad posterior denominada provisionalmente `fridolin-cierre-preplanilla`.
-
 
