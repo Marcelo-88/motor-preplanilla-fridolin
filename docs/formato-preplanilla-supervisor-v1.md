@@ -1,47 +1,10 @@
 # Formato de preplanilla por supervisor — versión 1
 
-Estado: validado con las preplanillas de Medrano y Cabrera; tratamiento nocturno en validación con Flores, agosto de 2026.
+Estado: formato aplicado a Medrano, Cabrera, Flores y Navarro. El tratamiento nocturno y los cambios de turno continúan sujetos a validación funcional del usuario antes de convertir el proceso en una habilidad.
 
 ## Alcance
 
 Esta versión define el formato base de los documentos que revisan los supervisores. Todavía no incluye bolsa de horas extra ni planilla final de Recursos Humanos.
-
-## Cambios de turno dentro del mes
-
-El maestro conserva la asignación final del empleado y tres campos para reconstruir su historial mensual:
-
-- `Turno Completo`: `S` cuando mantuvo un único turno durante todo el periodo; `N` cuando cambió de turno.
-- `Fecha DIurno`: rango o rangos en los que corresponde aplicar el horario diurno.
-- `Fecha Nocturno`: rango o rangos en los que corresponde aplicar el horario nocturno.
-
-Reglas del motor:
-
-- Con `Turno Completo = S`, se utiliza normalmente el turno, área y supervisor registrados al cierre del mes.
-- Con `Turno Completo = N`, cada jornada se reconstruye usando el turno correspondiente a su fecha.
-- Las fechas nocturnas usan 22:00–05:30 del día siguiente; las diurnas usan 07:00–15:30.
-- Una fecha que no pertenece a ninguno de los rangos no recibe un turno supuesto y no genera una falta automática.
-- El empleado se excluye de las pestañas generales para evitar duplicación.
-- Sus excepciones reales se presentan en `CAMBIOS_DE_TURNO` dentro de la preplanilla del supervisor final registrado en el maestro.
-
-### Caso de validación: Silvia Chambi
-
-- CI: `6754961`.
-- Nombre: Chambi Vasquez Silvia Antonia.
-- Asignación final: turno diurno, Panadería y Repostería, supervisora Navarro Isabel.
-- `Turno Completo = N`.
-- Nocturno: 01/08/2026–08/08/2026.
-- Diurno: 10/08/2026–31/08/2026.
-- El 09/08/2026 queda fuera de ambos rangos y no debe producir ausencia automática.
-- Ya fue eliminada completamente de la preplanilla de Flores, incluida la auditoría.
-- Pendiente: recalcular sus jornadas con ambos horarios y generar únicamente sus excepciones en `CAMBIOS_DE_TURNO` de la preplanilla de Navarro.
-
-## Personal retirado
-
-- El estado laboral se toma de la pestaña `01_Maestro_Empleados`.
-- El personal retirado nunca aparece en `01_FIJOS_EVENTUALES` ni en `02_JORNALEROS`.
-- Si tuvo marcaciones dentro del periodo, sus excepciones se presentan en `03_PERSONAL_RETIRADO` para validación.
-- Si no tuvo ninguna actividad biométrica durante el mes, no se le generan faltas ficticias.
-- Cuando exista fecha de retiro, el motor debe evaluar únicamente desde el inicio del periodo hasta su último día laboral.
 
 ## Personal jornalero
 
@@ -90,6 +53,23 @@ Reglas del motor:
 - Solo aparecen como excepción los días laborables sin ninguna marcación.
 - Esos días deben aprobarse o rechazarse por permiso, vacación u otra justificación.
 
+## Personal retirado
+
+- El estado laboral se cruza con `Control Vinculación Personal Agosto 2026` y se conserva en el maestro.
+- Una persona retirada que tuvo actividad durante una parte del mes aparece únicamente en `PERSONAL_RETIRADO`.
+- No se generan faltas artificiales fuera de su periodo real de actividad.
+- El personal retirado no se mezcla con la pestaña general.
+
+## Cambios de turno o supervisor
+
+- `Turno Completo = S` indica que el turno habitual aplica durante todo el mes.
+- `Turno Completo = N` obliga al motor a leer los rangos `Fecha Diurno` y `Fecha Nocturno`.
+- Cada fecha utiliza su horario correspondiente; las fechas fuera de ambos rangos no generan automáticamente una falta.
+- La persona se asigna al supervisor final registrado en el maestro.
+- Todas las situaciones atípicas de estas personas se aíslan en `CAMBIOS_DE_TURNO` y no aparecen en la pestaña general.
+- El supervisor final decide qué hacer con cada excepción. El motor no corrige automáticamente una marcación rara.
+- Caso piloto: Silvia Chambi, nocturno del 01/08 al 08/08 y diurno del 10/08 al 31/08. El 09/08 queda fuera de ambos rangos.
+
 ## Orden de columnas
 
 1. CI
@@ -100,20 +80,21 @@ Reglas del motor:
 6. Impacto
 7. Decisión supervisor
 8. Consecuencia
-9. Observación supervisor
-10. Columna separadora en blanco, blanca y sin bordes
-11. Turno
-12. Área
-13. Marcaciones RAW
-14. Jornada reconstruida
-15. Horas trabajadas
-16. Retraso entrada
-17. Retraso comida
-18. Salida temprana automática
-19. Total retraso
-20. Estado
-21. Consecuencia base
-22. Reglas aplicadas, únicamente en auditoría
+9. Turnos a pagar, únicamente en jornaleros
+10. Observación supervisor
+11. Columna separadora en blanco, blanca y sin bordes
+12. Turno
+13. Área
+14. Marcaciones RAW
+15. Jornada reconstruida
+16. Horas trabajadas
+17. Retraso entrada
+18. Retraso comida
+19. Salida temprana automática
+20. Total retraso
+21. Estado
+22. Consecuencia base
+23. Reglas aplicadas, únicamente en auditoría
 
 ## Campos editables y cálculos
 
@@ -135,11 +116,13 @@ Reglas del motor:
 
 ## Estructura del archivo
 
-- `00_INSTRUCCIONES`
 - `01_FIJOS_EVENTUALES`
 - `02_JORNALEROS`
-- `03_PERSONAL_RETIRADO`, cuando existan retirados asignados al supervisor
-- `04_AUDITORIA` cuando exista la pestaña de retirados; en caso contrario `03_AUDITORIA`
+- `03_CAMBIOS_DE_TURNO`, cuando existen casos
+- `PERSONAL_RETIRADO`, numerada según las pestañas anteriores
+- `AUDITORIA`, como última pestaña y numerada según las pestañas anteriores
+
+La pestaña de instrucciones fue eliminada de las preplanillas de supervisores.
 
 Las secciones principal y técnica deben conservar filtros. Se congelan la fila de encabezados y las primeras cuatro columnas para facilitar la revisión.
 
