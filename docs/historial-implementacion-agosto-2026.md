@@ -2,6 +2,8 @@
 
 Última actualización: 4 de septiembre de 2026.
 
+Estado de preparación de la habilidad: 80%. Las reglas, comandos, historial y tres documentos aprobados están consolidados. Julia Cruz Olmos e Isabel Navarro permanecen pendientes y no fueron modificadas en la última revisión.
+
 ## Objetivo vigente
 
 Generar preplanillas por supervisor en Drive, usando el repositorio `motor-preplanilla-fridolin` para leer el biométrico, aplicar las reglas del repositorio base `preplanilla-fridolin` y presentar solamente excepciones que requieren revisión. La bolsa de horas extra, la lectura final de decisiones y la planilla consolidada de Recursos Humanos permanecen pendientes.
