@@ -4,6 +4,8 @@
 
 Estado de preparación de la habilidad: 80%. Las reglas, comandos, historial y tres documentos aprobados están consolidados. Julia Cruz Olmos e Isabel Navarro permanecen pendientes y no fueron modificadas en la última revisión.
 
+El 4 de septiembre de 2026 se regeneró y reemplazó nuevamente la preplanilla de Medrano con la versión vigente: 49 excepciones de fijos/eventuales, 0 jornaleros, 133 registros técnicos, 9 excepciones válidas de STAFF, Ever Medrano excluido y 0 errores de fórmula.
+
 ## Objetivo vigente
 
 Generar preplanillas por supervisor en Drive, usando el repositorio `motor-preplanilla-fridolin` para leer el biométrico, aplicar las reglas del repositorio base `preplanilla-fridolin` y presentar solamente excepciones que requieren revisión. La bolsa de horas extra, la lectura final de decisiones y la planilla consolidada de Recursos Humanos permanecen pendientes.
