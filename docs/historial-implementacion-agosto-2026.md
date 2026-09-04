@@ -6,6 +6,8 @@ Estado de preparación de la habilidad: 80%. Las reglas, comandos, historial y t
 
 El 4 de septiembre de 2026 se regeneró y reemplazó nuevamente la preplanilla de Medrano con la versión vigente: 49 excepciones de fijos/eventuales, 0 jornaleros, 133 registros técnicos, 9 excepciones válidas de STAFF, Ever Medrano excluido y 0 errores de fórmula.
 
+El 4 de septiembre de 2026 se regeneró, revisó y reemplazó la preplanilla de Cabrera: 251 excepciones de fijos/eventuales, 8 excepciones de la jornalera Primitiva, 620 registros técnicos, 0 identidades duplicadas y 0 errores de fórmula. Las excepciones jornaleras son 4 marcaciones incompletas, 2 días sin marcaciones y 2 turnos y medio por validar; no se muestran días trabajados normalmente.
+
 ## Objetivo vigente
 
 Generar preplanillas por supervisor en Drive, usando el repositorio `motor-preplanilla-fridolin` para leer el biométrico, aplicar las reglas del repositorio base `preplanilla-fridolin` y presentar solamente excepciones que requieren revisión. La bolsa de horas extra, la lectura final de decisiones y la planilla consolidada de Recursos Humanos permanecen pendientes.
